@@ -154,9 +154,16 @@ export class TicketBoardComponent implements OnInit {
     const newName = this.editingListName.trim();
     if (newName) {
       await this.db.updateListName(listId, newName);
-      await this.loadData();
+      
+      // Update local state directly instead of reloading all data
+      this.lists.update(currentLists => 
+        currentLists.map(list => 
+          list.id === listId ? { ...list, name: newName } : list
+        )
+      );
+      
+      this.editingListId = null;
+      this.editingListName = '';
     }
-    this.editingListId = null;
-    this.editingListName = '';
   }
 }
