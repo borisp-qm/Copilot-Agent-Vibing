@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef, afterNextRender, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -28,7 +28,7 @@ export class TicketBoardComponent implements OnInit {
   originalListName: string = '';
   isCancelling: boolean = false;
 
-  constructor(private db: DatabaseService) {}
+  constructor(private db: DatabaseService, private injector: Injector) {}
 
   async ngOnInit(): Promise<void> {
     await this.db.initializeDefaultLists();
@@ -148,10 +148,10 @@ export class TicketBoardComponent implements OnInit {
     this.editingListName = list.name;
     this.originalListName = list.name;
     this.isCancelling = false;
-    // Focus the input after Angular renders it
-    setTimeout(() => {
+    // Use Angular's afterNextRender to focus after the next render cycle
+    afterNextRender(() => {
       this.listNameInput?.nativeElement.focus();
-    }, 0);
+    }, { injector: this.injector });
   }
 
   async saveListName(listId: string): Promise<void> {
