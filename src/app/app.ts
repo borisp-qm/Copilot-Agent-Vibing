@@ -9,5 +9,5 @@ import { TicketBoardComponent } from './components/ticket-board/ticket-board.com
   styleUrl: './app.css'
 })
 export class App {
-  title = 'Vibing';
+  title = 'Vibing Test';
 }
