@@ -24,6 +24,8 @@ export class TicketBoardComponent implements OnInit {
   showAddForm: { [listId: string]: boolean } = {};
   editingListId: string | null = null;
   editingListName: string = '';
+  originalListName: string = '';
+  isCancelling: boolean = false;
 
   constructor(private db: DatabaseService) {}
 
@@ -143,11 +145,16 @@ export class TicketBoardComponent implements OnInit {
   startEditingListName(list: TicketList): void {
     this.editingListId = list.id;
     this.editingListName = list.name;
+    this.originalListName = list.name;
+    this.isCancelling = false;
   }
 
   async saveListName(listId: string): Promise<void> {
+    if (this.isCancelling) {
+      return;
+    }
     const newName = this.editingListName.trim();
-    if (newName && newName !== this.lists().find(l => l.id === listId)?.name) {
+    if (newName && newName !== this.originalListName) {
       await this.db.updateListName(listId, newName);
       await this.loadData();
     }
@@ -155,7 +162,9 @@ export class TicketBoardComponent implements OnInit {
   }
 
   cancelEditingListName(): void {
+    this.isCancelling = true;
     this.editingListId = null;
     this.editingListName = '';
+    this.originalListName = '';
   }
 }
