@@ -56,6 +56,10 @@ export class DatabaseService extends Dexie {
     return await this.ticketLists.orderBy('order').toArray();
   }
 
+  async updateListName(listId: string, newName: string): Promise<number> {
+    return await this.ticketLists.update(listId, { name: newName });
+  }
+
   async moveTicket(ticketId: number, newListId: string, newOrder: number): Promise<void> {
     await this.updateTicket(ticketId, { listId: newListId, order: newOrder });
   }
