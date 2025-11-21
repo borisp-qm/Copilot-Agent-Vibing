@@ -152,7 +152,7 @@ export class TicketBoardComponent implements OnInit {
 
   async saveListName(listId: string): Promise<void> {
     const newName = this.editingListName.trim();
-    if (newName && newName !== '') {
+    if (newName) {
       await this.db.updateListName(listId, newName);
       await this.loadData();
     }
