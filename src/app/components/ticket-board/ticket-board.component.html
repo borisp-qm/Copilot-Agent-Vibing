@@ -4,7 +4,27 @@
   <div class="board-container" cdkDropListGroup>
     <div class="list-column" *ngFor="let list of lists(); trackBy: trackByListId">
       <div class="list-header">
-        <h2>{{ list.name }}</h2>
+        <div class="list-title-container">
+          <h2 *ngIf="editingListId !== list.id">{{ list.name }}</h2>
+          <input
+            *ngIf="editingListId === list.id"
+            type="text"
+            [(ngModel)]="editingListName"
+            class="list-name-input"
+            [attr.aria-label]="'Edit column name: ' + originalListName"
+            (keyup.enter)="saveListName(list.id)"
+            (keyup.escape)="cancelEditingListName()"
+            (blur)="saveListName(list.id)"
+            autofocus>
+          <button
+            *ngIf="editingListId !== list.id"
+            class="edit-list-btn"
+            (click)="startEditingListName(list)"
+            [attr.aria-label]="'Edit column name: ' + list.name"
+            title="Edit column name">
+            ✎
+          </button>
+        </div>
         <span class="ticket-count">{{ ticketsByList()[list.id]?.length || 0 }}</span>
       </div>
 

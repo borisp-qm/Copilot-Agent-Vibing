@@ -67,4 +67,14 @@ export class DatabaseService extends Dexie {
       }
     });
   }
+
+  async updateListName(listId: string, newName: string): Promise<void> {
+    if (!newName.trim()) {
+      throw new Error('List name cannot be empty');
+    }
+    const updated = await this.ticketLists.update(listId, { name: newName });
+    if (updated === 0) {
+      throw new Error(`List with id '${listId}' not found`);
+    }
+  }
 }

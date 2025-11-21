@@ -22,6 +22,10 @@ export class TicketBoardComponent implements OnInit {
   newTicketTitle: { [listId: string]: string } = {};
   newTicketDescription: { [listId: string]: string } = {};
   showAddForm: { [listId: string]: boolean } = {};
+  editingListId: string | null = null;
+  editingListName: string = '';
+  originalListName: string = '';
+  isCancelling: boolean = false;
 
   constructor(private db: DatabaseService) {}
 
@@ -136,5 +140,43 @@ export class TicketBoardComponent implements OnInit {
 
   trackByListId(index: number, list: TicketList): string {
     return list.id;
+  }
+
+  startEditingListName(list: TicketList): void {
+    this.editingListId = list.id;
+    this.editingListName = list.name;
+    this.originalListName = list.name;
+    this.isCancelling = false;
+  }
+
+  async saveListName(listId: string): Promise<void> {
+    if (this.isCancelling) {
+      return;
+    }
+    const newName = this.editingListName.trim();
+    if (!newName) {
+      // Exit edit mode if name is empty
+      this.cancelEditingListName();
+      return;
+    }
+    if (newName !== this.originalListName) {
+      try {
+        await this.db.updateListName(listId, newName);
+        await this.loadData();
+      } catch (error) {
+        // On error, restore original name and exit edit mode
+        console.error('Failed to update list name:', error);
+        this.cancelEditingListName();
+        return;
+      }
+    }
+    this.cancelEditingListName();
+  }
+
+  cancelEditingListName(): void {
+    this.isCancelling = true;
+    this.editingListId = null;
+    this.editingListName = '';
+    this.originalListName = '';
   }
 }
