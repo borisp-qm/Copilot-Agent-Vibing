@@ -154,7 +154,12 @@ export class TicketBoardComponent implements OnInit {
       return;
     }
     const newName = this.editingListName.trim();
-    if (newName && newName !== this.originalListName) {
+    if (!newName) {
+      // Exit edit mode if name is empty
+      this.cancelEditingListName();
+      return;
+    }
+    if (newName !== this.originalListName) {
       await this.db.updateListName(listId, newName);
       await this.loadData();
     }

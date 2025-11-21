@@ -11,6 +11,7 @@
             type="text"
             [(ngModel)]="editingListName"
             class="list-name-input"
+            [attr.aria-label]="'Edit column name: ' + originalListName"
             (keyup.enter)="saveListName(list.id)"
             (keyup.escape)="cancelEditingListName()"
             (blur)="saveListName(list.id)"
@@ -19,6 +20,7 @@
             *ngIf="editingListId !== list.id"
             class="edit-list-btn"
             (click)="startEditingListName(list)"
+            [attr.aria-label]="'Edit column name: ' + list.name"
             title="Edit column name">
             ✎
           </button>
