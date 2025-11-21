@@ -67,4 +67,8 @@ export class DatabaseService extends Dexie {
       }
     });
   }
+
+  async updateListName(listId: string, newName: string): Promise<void> {
+    await this.ticketLists.update(listId, { name: newName });
+  }
 }
