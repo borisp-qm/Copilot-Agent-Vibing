@@ -5,7 +5,7 @@
 **Vibing** - Modern Angular 21 ticket management SPA with drag-and-drop Kanban board. Persists data locally via IndexedDB (Dexie.js). Auto-deploys to GitHub Pages.
 
 **Stack**: Angular 21 (standalone components, signals), Angular CDK, TypeScript
-**Runtime**: Node.js 20.x, npm 10.8.2
+**Runtime**: Node.js 20.x, npm 10.x
 **Size**: 14 source files
 
 ## Build & Development
@@ -42,7 +42,7 @@ npm test            # Vitest tests (~2-3s, IndexedDB warning is EXPECTED)
 ### Structure
 ```
 src/app/
-  components/ticket-board/    # Main board with drag-drop logic
+  components/ticket-board/    # Main board component (TS, HTML, CSS)
   models/ticket.model.ts      # Data interfaces
   services/database.service.ts # Dexie.js IndexedDB wrapper
   app.ts, app.config.ts       # Root component & config
@@ -96,7 +96,7 @@ src/main.ts, index.html
 ## Critical Reminders
 
 1. Trust these instructions - only explore if incomplete/incorrect
-2. Node 20.x + npm 10.8.2 (matches CI)
+2. Node 20.x + npm 10.x (CI uses specific versions from package.json)
 3. Build before committing (catch TS errors early)
 4. Clean build: remove dist/ and .angular/cache/
 5. IndexedDB test error is EXPECTED
