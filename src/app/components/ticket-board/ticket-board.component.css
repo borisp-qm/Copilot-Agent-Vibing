@@ -62,6 +62,8 @@ h1 {
   padding: 4px 8px;
   background: white;
   font-family: inherit;
+  flex: 1;
+  min-width: 0;
 }
 
 .list-name-input:focus {
