@@ -160,8 +160,15 @@ export class TicketBoardComponent implements OnInit {
       return;
     }
     if (newName !== this.originalListName) {
-      await this.db.updateListName(listId, newName);
-      await this.loadData();
+      try {
+        await this.db.updateListName(listId, newName);
+        await this.loadData();
+      } catch (error) {
+        // On error, restore original name and exit edit mode
+        console.error('Failed to update list name:', error);
+        this.cancelEditingListName();
+        return;
+      }
     }
     this.cancelEditingListName();
   }
