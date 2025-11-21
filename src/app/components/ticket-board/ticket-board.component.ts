@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -16,7 +16,7 @@ interface TicketsByList {
   templateUrl: './ticket-board.component.html',
   styleUrls: ['./ticket-board.component.css']
 })
-export class TicketBoardComponent implements OnInit, AfterViewChecked {
+export class TicketBoardComponent implements OnInit {
   @ViewChild('listNameInput') listNameInput?: ElementRef<HTMLInputElement>;
   lists = signal<TicketList[]>([]);
   ticketsByList = signal<TicketsByList>({});
@@ -27,20 +27,12 @@ export class TicketBoardComponent implements OnInit, AfterViewChecked {
   editingListName: string = '';
   originalListName: string = '';
   isCancelling: boolean = false;
-  shouldFocusInput: boolean = false;
 
   constructor(private db: DatabaseService) {}
 
   async ngOnInit(): Promise<void> {
     await this.db.initializeDefaultLists();
     await this.loadData();
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.shouldFocusInput && this.listNameInput) {
-      this.listNameInput.nativeElement.focus();
-      this.shouldFocusInput = false;
-    }
   }
 
   async loadData(): Promise<void> {
@@ -156,7 +148,10 @@ export class TicketBoardComponent implements OnInit, AfterViewChecked {
     this.editingListName = list.name;
     this.originalListName = list.name;
     this.isCancelling = false;
-    this.shouldFocusInput = true;
+    // Focus the input after Angular renders it
+    setTimeout(() => {
+      this.listNameInput?.nativeElement.focus();
+    }, 0);
   }
 
   async saveListName(listId: string): Promise<void> {
