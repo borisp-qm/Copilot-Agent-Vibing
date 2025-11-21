@@ -7,6 +7,7 @@
         <div class="list-title-container">
           <h2 *ngIf="editingListId !== list.id">{{ list.name }}</h2>
           <input
+            #listNameInput
             *ngIf="editingListId === list.id"
             type="text"
             [(ngModel)]="editingListName"
@@ -14,8 +15,7 @@
             [attr.aria-label]="'Edit column name: ' + originalListName"
             (keyup.enter)="saveListName(list.id)"
             (keyup.escape)="cancelEditingListName()"
-            (blur)="saveListName(list.id)"
-            autofocus>
+            (blur)="saveListName(list.id)">
           <button
             *ngIf="editingListId !== list.id"
             class="edit-list-btn"
